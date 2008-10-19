@@ -1143,6 +1143,7 @@ global double image_scale init(100);
 global int use_lessopen init(FALSE);
 
 global char *keymap_file init(KEYMAP_FILE);
+global int next_down_width init(10);
 
 #ifdef USE_M17N
 #define get_mctype(c) ((Lineprop)wtf_type((wc_uchar *)(c)) << 8)

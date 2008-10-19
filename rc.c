@@ -233,6 +233,8 @@ static int OptionEncode = FALSE;
 
 #define CMT_KEYMAP_FILE N_("keymap file")
 
+#define CMT_NEXT_DOWN_WIDTH N_("NEXT_DOWN width")
+
 #define PI_TEXT    0
 #define PI_ONOFF   1
 #define PI_SEL_C   2
@@ -482,6 +484,8 @@ struct param_ptr params3[] = {
     {"preserve_timestamp", P_CHARINT, PI_ONOFF, (void *)&PreserveTimestamp,
      CMT_PRESERVE_TIMESTAMP, NULL},
     {"keymap_file", P_STRING, PI_TEXT, (void *)&keymap_file, CMT_KEYMAP_FILE,
+     NULL},
+    {"next_down_width", P_INT, PI_TEXT, (void *)&next_down_width, CMT_NEXT_DOWN_WIDTH,
      NULL},
     {NULL, 0, 0, NULL, NULL, NULL},
 };

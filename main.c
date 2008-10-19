@@ -3776,6 +3776,11 @@ nextX(int d, int dy)
 }
 
 
+static int
+max(int x,int y){
+  return x > y ? x : y;
+}
+
 /* go to the next downward/upward anchor */
 static void
 nextY(int d)
@@ -3803,16 +3808,24 @@ nextY(int d)
 	    hseq = abs(an->hseq);
 	an = NULL;
 	for (; y >= 0 && y <= Currentbuf->lastLine->linenumber; y += d) {
-	  for(j = -10; j < 10; ++j){
-	    if(x+j >= 0) {
-	      an = retrieveAnchor(Currentbuf->href, y, x+j);
+	  for(j = 0; j < max(next_down_width,1); j++){
+	    an = retrieveAnchor(Currentbuf->href, y, x+j);
+	    if( !an){
+	      an = retrieveAnchor(Currentbuf->formitem, y, x+j);
+	    }
+
+	    if(x-j >= 0){
 	      if (!an){
-		an = retrieveAnchor(Currentbuf->formitem, y, x+j);
+		an = retrieveAnchor(Currentbuf->formitem, y, x-j);
 	      }
-	      if (an && hseq != abs(an->hseq)) {
-		pan = an;
-		break;
+	      if (!an){
+		an = retrieveAnchor(Currentbuf->href, y, x-j);
 	      }
+	    }
+	    
+	    if (an && hseq != abs(an->hseq)) {
+	      pan = an;
+	      break;
 	    }
 	  }
 	  if(an){
