@@ -3775,13 +3775,14 @@ nextX(int d, int dy)
     displayBuffer(Currentbuf, B_NORMAL);
 }
 
+
 /* go to the next downward/upward anchor */
 static void
 nextY(int d)
 {
     HmarkerList *hl = Currentbuf->hmarklist;
     Anchor *an, *pan;
-    int i, x, y, n = searchKeyNum();
+    int i, j, x, y, n = searchKeyNum();
     int hseq;
 
     if (Currentbuf->firstLine == NULL)
@@ -3802,13 +3803,21 @@ nextY(int d)
 	    hseq = abs(an->hseq);
 	an = NULL;
 	for (; y >= 0 && y <= Currentbuf->lastLine->linenumber; y += d) {
-	    an = retrieveAnchor(Currentbuf->href, y, x);
-	    if (!an)
-		an = retrieveAnchor(Currentbuf->formitem, y, x);
-	    if (an && hseq != abs(an->hseq)) {
+	  for(j = -10; j < 10; ++j){
+	    if(x+j >= 0) {
+	      an = retrieveAnchor(Currentbuf->href, y, x+j);
+	      if (!an){
+		an = retrieveAnchor(Currentbuf->formitem, y, x+j);
+	      }
+	      if (an && hseq != abs(an->hseq)) {
 		pan = an;
 		break;
+	      }
 	    }
+	  }
+	  if(an){
+	    break;
+	  }
 	}
 	if (!an)
 	    break;
@@ -3816,8 +3825,10 @@ nextY(int d)
 
     if (pan == NULL)
 	return;
-    gotoLine(Currentbuf, pan->start.line);
-    arrangeLine(Currentbuf);
+
+    gotoLine(Currentbuf, y);
+    Currentbuf->pos = pan->start.pos;
+    arrangeCursor(Currentbuf);
     displayBuffer(Currentbuf, B_NORMAL);
 }
 
